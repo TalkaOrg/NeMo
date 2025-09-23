@@ -324,7 +324,7 @@ def getKneighborsConnections(affinity_mat: torch.Tensor, p_value: int, mask_meth
     """
     dim = affinity_mat.shape
     binarized_affinity_mat = torch.zeros_like(affinity_mat).half()
-    sorted_matrix = torch.argsort(affinity_mat, dim=1, descending=True)[:, :p_value]
+    sorted_matrix = torch.topk(affinity_mat, p_value, dim=1, largest=True).indices
     binarized_affinity_mat[sorted_matrix.T, torch.arange(affinity_mat.shape[0])] = (
         torch.ones(1).to(affinity_mat.device).half()
     )
